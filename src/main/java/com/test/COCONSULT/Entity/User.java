@@ -72,6 +72,21 @@ public class User {
 
 
 
+    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    private Set<Salaire> salaires;
+
+    @OneToMany
+    @JsonIgnore
+    private Set<Conge> conges;
+
+    @OneToMany
+    @JsonIgnore
+    private Set<Pointage> pointages;
+
+    @OneToMany
+    @JsonIgnore
+    private Set<Evaluation> evaluations;
 
 
 
