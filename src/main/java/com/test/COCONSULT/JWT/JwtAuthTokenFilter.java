@@ -49,13 +49,13 @@ public class JwtAuthTokenFilter implements Filter {
 
     public void setAuthentication(String jwt, HttpServletRequest request) {
         String username = tokenProvider.getUserNameFromJwtToken(jwt);
+        logger.debug("JWT Token contains username: {}", username);
+
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         UsernamePasswordAuthenticationToken authentication =
                 new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
         authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-
-
     }
 
 
@@ -116,8 +116,8 @@ public class JwtAuthTokenFilter implements Filter {
     public String extractAccessToken(HttpServletRequest request) {
         // Extract the access token from the Authorization header
         String authHeader = request.getHeader("Authorization");
-        if (authHeader != null && authHeader.startsWith("access ")) {
-            return authHeader.substring(7);
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            return authHeader.substring(7);  // "Bearer " is 7 characters
         }
         return null;
     }
@@ -126,51 +126,22 @@ public class JwtAuthTokenFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
 
-  /*     HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpSession session = httpRequest.getSession();
-
-        Set<String> excludedUrls = new HashSet<>();
-        excludedUrls.add("/api/user/forgetpass");
-        excludedUrls.add("/api/auth/");
-        excludedUrls.add("/OTP/");
-        excludedUrls.add("/Msg");
-        excludedUrls.add("/api/auth/refreshToken");
-
-
-        String requestUri = httpRequest.getRequestURI();
-        boolean isExcluded = false;
-        for (String excludedUrl : excludedUrls) {
-            if (requestUri.startsWith(excludedUrl)) {
-                isExcluded = true;
-                break;
-            }
-        }
-
-        if (isExcluded) {
-            chain.doFilter(request, response);
-            return;
-        }
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
 
         try {
-            String jwt = getJwt(httpRequest, session);
+            String jwt = extractAccessToken(httpRequest);
+            logger.debug("Extracted JWT: {}", jwt);
             if (jwt != null && tokenProvider.validateJwtToken(jwt)) {
                 setAuthentication(jwt, httpRequest);
             } else {
-                // If token is invalid or expired, handle authentication error
-                JwtAuthEntryPoint authEntryPoint = new JwtAuthEntryPoint();
-                AuthenticationException AuthenticationException = new AuthenticationException("Token expired or invalid") {
-                };
-                authEntryPoint.commence(httpRequest, (HttpServletResponse) response,  AuthenticationException );
-                return;
+                logger.warn("JWT Token is invalid or not present.");
             }
         } catch (Exception e) {
-            // Handle other exceptions if needed
-            e.printStackTrace();
+            logger.error("Cannot set user authentication: {}", e.getMessage());
         }
-*/
+
         chain.doFilter(request, response);
     }
-
     public String extractRefreshToken(HttpServletRequest request) {
         // Retrieve the refresh token from the request attributes or parameters
         String refreshToken = request.getParameter("RefreshToken");

@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -37,14 +38,11 @@ public class User {
     private boolean bannedchatGP;
 
     private boolean addedtoGPChat;
-   private Date joinDate;
+    private Date joinDate;
     private double soldeConge;
     private String exp;
     private byte[] image;
     private Boolean disponible = false;
-    private LocalDateTime signInTime;
-    private LocalDateTime signOutTime;
-    private Long sessionDuration;
 
     @CreatedDate
     private LocalDate createdDate;
@@ -60,33 +58,19 @@ public class User {
     @JoinTable(name = "user_roles",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
-    //@JsonIgnore
 
     private Set <Role> roles = new HashSet<>();
 
-
-
-
-
-
-
-
-
-    @OneToMany( cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Set<Salaire> salaires;
+    private List<RequestTimeOff> requestTimeOffs;
 
-    @OneToMany
-    @JsonIgnore
-    private Set<Conge> conges;
 
-    @OneToMany
-    @JsonIgnore
-    private Set<Pointage> pointages;
 
-    @OneToMany
-    @JsonIgnore
-    private Set<Evaluation> evaluations;
+
+
+
+
 
 
 

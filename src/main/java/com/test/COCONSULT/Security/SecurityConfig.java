@@ -55,27 +55,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Override
-
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .cors().configurationSource(corsConfigurationSource).and()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/Payment/upload-payments-data").permitAll()
-
-                .antMatchers("/api/auth/refreshToken").permitAll() // Permit access to refreshToken endpoint
-                .antMatchers("/**").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/RequestTimeOff/addRequestTimeOff").authenticated()
+                .antMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-
-                // Secure APIs for social login using OAuth2
-                .oauth2Login()
-                .defaultSuccessUrl("/oauth2/success")
-                .failureUrl("/oauth2/failure")
-                .and()
-                .httpBasic();
-
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
     }
 
