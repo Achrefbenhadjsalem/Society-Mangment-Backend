@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController("/api/TimeOffRaison")
-
+@RestController
+@RequestMapping("/api/TimeOffRaison")
 public class TimeOffRaisonController  {
     @Autowired
     TimeOffRaisonServiceIMP timeOffRaisonServiceIMP;

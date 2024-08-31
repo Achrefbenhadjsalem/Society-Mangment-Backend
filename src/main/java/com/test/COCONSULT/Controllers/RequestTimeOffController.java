@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/RequestTimeOff")
@@ -15,9 +16,9 @@ public class RequestTimeOffController {
     RequestTimeeoffRepo requestTimeeoffRepo;
     @Autowired
     RequestTimOffServiceIMp requestTimOffServiceIMp;
-    @PostMapping("/addRequestTimeOff")
-    public RequestTimeOff addRequestTimeOff(@RequestBody RequestTimeOff requestTimeOff) {
-        return requestTimOffServiceIMp.addRequestTimeOff(requestTimeOff);
+    @PostMapping("/addRequestTimeOff/{timeOffRaisonId}")
+    public RequestTimeOff addRequestTimeOff(@RequestBody RequestTimeOff requestTimeOff, @PathVariable("timeOffRaisonId") Integer timeOffRaisonId) {
+        return requestTimOffServiceIMp.addRequestTimeOff(requestTimeOff, timeOffRaisonId);
     }
     @PutMapping("/editRequestTimeOffByID/{idRequestTimeOff}")
     public RequestTimeOff editRequestTimeOffByID(@PathVariable("idRequestTimeOff") Integer idRequestTimeOff, @RequestBody RequestTimeOff updatedRequestTimeOff) {
@@ -34,5 +35,17 @@ public class RequestTimeOffController {
     @GetMapping("/getRequestTimeOffById/{idRequestTimeOff}")
     public RequestTimeOff getRequestTimeOffById(@PathVariable("idRequestTimeOff") Integer idRequestTimeOff) {
         return requestTimOffServiceIMp.getRequestTimeOffById(idRequestTimeOff);
+    }
+    @GetMapping("/getRequestTimeOffByUser/{username}")
+    public List<RequestTimeOff> getRequestTimeOffByUser(@PathVariable("username") String username) {
+        return requestTimOffServiceIMp.getRequestTimeOffByUser(username);
+    }
+    @GetMapping("/getAcceptedRequestTimeOffByUser/{username}")
+    public List<RequestTimeOff> getAcceptedRequestTimeOffByUser(@PathVariable("username") String username) {
+        return requestTimOffServiceIMp.getAcceptedRequestTimeOffByUser(username);
+    }
+    @GetMapping("/getAcceptedDaysByUserAndYear/{username}")
+    public Map<Integer, Double> getAcceptedDaysByUserAndYear(@PathVariable("username") String username) {
+        return requestTimOffServiceIMp.getAcceptedDaysByUserAndYear(username);
     }
 }

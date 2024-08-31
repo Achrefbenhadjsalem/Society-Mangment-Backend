@@ -238,39 +238,10 @@ UserServiceIMP implements UserServiceInterface {
 
     }
 
-    public ResponseEntity<User> registerEntreprise(User user1) {
-        if (userRepository.existsByUsername(user1.getUsername())) {
-            return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-        }
-        if (userRepository.existsByEmail(user1.getEmail())) {
-            return new ResponseEntity<User>(HttpStatus.BAD_REQUEST);
-        }
-        User user = new User(user1.getName(), user1.getUsername(), user1.getEmail(), passwordEncoder.encode(user1.getPassword()), false, user1.getAddress(), false);
-        Set<Role> roles = new HashSet<>();
-        Role userRole = roleRepository.findByName(RoleName.Entreprise)
-                .orElseThrow(() -> new RuntimeException("Fail! -> Cause: User Role not find."));
-        roles.add(userRole);
-        user.setRoles(roles);
-        user.setValid(true);
-        User suser = userRepository.save(user);
-        if (suser != null) {
-            String Newligne = System.getProperty("line.separator");
-            String url = "http://localhost:4200/auth/verification/" + suser.getToken();
-            String body = "Soyez le bienvenue dans notre platforme ECOtalan  \n  veuillez utuliser ce lien là pour s'authentifier :" + Newligne + url + Newligne + "verification" +
-                    "Voici votre code de verfication  TN1122" ;
-            try {
-                mailSending.send(user.getEmail(), "Welcome", body);
-                return new ResponseEntity<User>(user, HttpStatus.OK);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
-            }
-        } else {
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
 
 
-    }
+
+
 
     public ResponseEntity<User> registerAdmin(@Valid @RequestBody User user) {
         if (userRepository.existsByUsername(user.getUsername())) {

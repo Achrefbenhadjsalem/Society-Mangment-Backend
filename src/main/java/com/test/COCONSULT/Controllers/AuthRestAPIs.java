@@ -113,10 +113,7 @@ public class AuthRestAPIs {
        return userServiceIMP.registerUser(user1,  roleName);
     }
 
-        @RequestMapping(value = "/signup/entreprise", method = RequestMethod.POST)
-        public ResponseEntity<User> registerEntreprise(@Validated @RequestBody User user1){
-          return userServiceIMP.registerEntreprise(user1);
-    }
+
     @RequestMapping(value = "/signupadmin", method = RequestMethod.POST)
     public ResponseEntity<User> registerAdmin(@Valid @RequestBody User user)  {
         return userServiceIMP.registerAdmin(user);

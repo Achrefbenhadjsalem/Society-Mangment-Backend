@@ -4,10 +4,11 @@ import com.test.COCONSULT.Entity.RequestTimeOff;
 import com.test.COCONSULT.Entity.TimeOffRaison;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RequestTimeOffInterface {
 
-    RequestTimeOff addRequestTimeOff(RequestTimeOff requestTimeOff);
+    RequestTimeOff addRequestTimeOff(RequestTimeOff requestTimeOff, Integer timeOffRaisonId);
 
     void deleteRequestTimeOffById(Integer idRequestTimeOff);
 
@@ -16,4 +17,11 @@ public interface RequestTimeOffInterface {
     List<RequestTimeOff> getAllRequestTimeOff();
 
     RequestTimeOff getRequestTimeOffById(Integer idRequestTimeOff);
-}
+
+    List<RequestTimeOff> getRequestTimeOffByUser(String username);
+
+    List<RequestTimeOff> getAcceptedRequestTimeOffByUser(String username);
+
+    Map<Integer, Double> getAcceptedDaysByUserAndYear(String username) ;
+
+    }

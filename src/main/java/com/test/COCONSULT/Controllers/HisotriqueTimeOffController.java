@@ -34,4 +34,7 @@ public class HisotriqueTimeOffController {
     public HistoriqueTimeOff getHistoriqueTimeOffById(@PathVariable("idHistoriqueTimeOff") Integer idHistoriqueTimeOff) {
         return historiqueTimeOffServiceIMP.getHistoriqueTimeOffById(idHistoriqueTimeOff);
     }
+
+
+
 }
